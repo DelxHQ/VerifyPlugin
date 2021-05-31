@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.net.HttpURLConnection;
@@ -21,7 +22,7 @@ public class Main extends JavaPlugin implements Listener {
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
+    public void onLogin(PlayerLoginEvent event) {
         JsonObject checkPlayerObject = this.get("http://localhost:3000/checkPlayer/" + event.getPlayer().getName());
         JsonObject getCodeObject = this.get("http://localhost:3000/generateCode/" + event.getPlayer().getName());
         if (!checkPlayerObject.get("verified").getAsBoolean()) {
@@ -29,11 +30,11 @@ public class Main extends JavaPlugin implements Listener {
                 // TODO: Add an endpoint to fetch the code again
                 // Or do I just put the code in the error?
                 String error = getCodeObject.get("error").getAsString().equals("Player already has a code") ? "You already have a code." : "An unknown error has occurred.";
-                event.getPlayer().kickPlayer(error);
+                event.disallow(PlayerLoginEvent.Result.KICK_OTHER, error);
                 return;
             }
             int code = getCodeObject.get("verificationCode").getAsInt();
-            event.getPlayer().kickPlayer("You must verify your §9Discord§r to play. \n\nUse the command §6!link§r in the §6#bot-spam§r channel containing code §c" + code);
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER,"You must verify your §9Discord§r to play. \n\nUse the command §6!link§r in the §6#bot-spam§r channel containing code §c" + code);
         }
     }
 
