@@ -1,6 +1,6 @@
 name: VerifyPlugin
 version: ${project.version}
-main: me.delxhq.pingplugin.pingplugin.Main
+main: me.delxhq.verifyPlugin.Main
 api-version: 1.16
 authors: [ DelxHQ ]
 website: delxhq.me
