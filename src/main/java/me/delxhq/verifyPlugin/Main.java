@@ -21,7 +21,7 @@ public class Main extends JavaPlugin implements Listener {
     }
 
     @EventHandler
-    public void onLogin(PlayerJoinEvent event) {
+    public void onJoin(PlayerJoinEvent event) {
         JsonObject checkPlayerObject = this.get("http://localhost:3000/checkPlayer/" + event.getPlayer().getName());
         JsonObject getCodeObject = this.get("http://localhost:3000/generateCode/" + event.getPlayer().getName());
         if (!checkPlayerObject.get("verified").getAsBoolean()) {
